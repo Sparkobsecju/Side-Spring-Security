@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<!-- Spring Boot Parent 統一管理 Starter、測試套件與 Maven Plugin 的相容版本。 -->
+	<parent>
+		<groupId>org.springframework.boot</groupId>
+		<artifactId>spring-boot-starter-parent</artifactId>
+		<version>4.1.0</version>
+		<relativePath/> <!-- 固定由 Maven Repository 解析 Parent，不尋找本機父專案。 -->
+	</parent>
+
+	<!-- Maven 專案座標：套件命名以 com.siven 開頭，輸出成 ch15 JAR。 -->
+	<groupId>com.siven</groupId>
+	<artifactId>ch15</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<name>ch15</name>
+	<description>Spring Boot Web、Thymeleaf 與 Spring Security 登入流程教學原型</description>
+
+	<properties>
+		<!-- 使用 Java 21 作為編譯基準；可在 Java 21 以上的相容 JDK 執行。 -->
+		<java.version>21</java.version>
+	</properties>
+
+	<dependencies>
+		<!-- 提供 SecurityFilterChain、表單登入、Session 驗證與登出功能。 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security</artifactId>
+		</dependency>
+		<!-- 提供伺服器端 Thymeleaf View；目前頁面為 static，保留供後續動態模板使用。 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf</artifactId>
+		</dependency>
+		<!-- Spring Boot 4 的 Servlet MVC Starter，包含 Controller 與內嵌 Web Server。 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webmvc</artifactId>
+		</dependency>
+		<!-- 讓未來的 Thymeleaf 模板可使用 sec:* 屬性讀取登入者與權限。 -->
+		<dependency>
+			<groupId>org.thymeleaf.extras</groupId>
+			<artifactId>thymeleaf-extras-springsecurity6</artifactId>
+		</dependency>
+
+		<!-- 編譯期程式碼產生工具；optional 可避免下游專案被迫引入 Lombok。 -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<optional>true</optional>
+		</dependency>
+
+		<!-- Spring Security 測試支援，例如表單登入與模擬登入使用者。 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- Thymeleaf 整合測試所需工具，僅在測試階段載入。 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-thymeleaf-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<!-- MockMvc、JUnit 與 Spring MVC 測試支援，僅在測試階段載入。 -->
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-webmvc-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<!-- 支援 mvn spring-boot:run，並在 package 階段建立可執行 JAR。 -->
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+			</plugin>
+			<!-- 明確註冊 Lombok Annotation Processor，供正式與測試原始碼編譯使用。 -->
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<executions>
+					<execution>
+						<id>default-compile</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>compile</goal>
+						</goals>
+						<configuration>
+							<annotationProcessorPaths>
+								<path>
+									<groupId>org.projectlombok</groupId>
+									<artifactId>lombok</artifactId>
+								</path>
+							</annotationProcessorPaths>
+						</configuration>
+					</execution>
+					<execution>
+						<id>default-testCompile</id>
+						<phase>test-compile</phase>
+						<goals>
+							<goal>testCompile</goal>
+						</goals>
+						<configuration>
+							<annotationProcessorPaths>
+								<path>
+									<groupId>org.projectlombok</groupId>
+									<artifactId>lombok</artifactId>
+								</path>
+							</annotationProcessorPaths>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>
