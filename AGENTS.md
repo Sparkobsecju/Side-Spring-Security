@@ -15,3 +15,10 @@
 
 - 修改 Java、Security 設定、頁面路由或 Maven 相依後，執行 `mvn test`。
 - 新增登入、授權、登出或轉址行為時，在 `Ch15ApplicationTests` 補上對應的 MockMvc 測試。
+
+## Git 分支要求
+
+- 遵循 `BRANCHING.md` 的精簡 GitFlow，不直接提交至 `main` 或 `develop`。
+- 一般 Codex 工作從 `develop` 建立 `agent/<簡短說明>`，並以 Draft PR 合併回 `develop`。
+- 新功能使用 `feature/*`，一般修正使用 `fix/*`，穩定版緊急修正使用 `hotfix/*`。
+- 建立 PR 前確認提交範圍、執行相關測試，並在 PR 說明中記錄驗證結果。
