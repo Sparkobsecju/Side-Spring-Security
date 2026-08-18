@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入失敗</title>
+    <!-- 登入驗證失敗時，Spring Security 會依 failureUrl 設定導向 GET /login-error。 -->
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 24px;
+            color: #1f2937;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #fff1f2, #fef2f2);
+        }
+        .error-card {
+            width: min(100%, 440px);
+            padding: 40px 36px;
+            border: 1px solid #fecaca;
+            border-radius: 18px;
+            background: #ffffff;
+            box-shadow: 0 20px 48px rgba(185, 28, 28, 0.12);
+            text-align: center;
+        }
+        .icon {
+            display: grid;
+            place-items: center;
+            width: 56px;
+            height: 56px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            color: #b91c1c;
+            font-size: 30px;
+            font-weight: 700;
+            background: #fee2e2;
+        }
+        h1 { margin: 0 0 12px; color: #991b1b; }
+        p { margin: 0 0 28px; color: #64748b; line-height: 1.7; }
+        a {
+            display: inline-block;
+            padding: 12px 20px;
+            border-radius: 9px;
+            color: #ffffff;
+            font-weight: 600;
+            text-decoration: none;
+            background: #4f46e5;
+        }
+    </style>
+</head>
+<body>
+<!-- 不顯示具體失敗原因，避免洩漏帳號是否存在等驗證資訊。 -->
+<main class="error-card" role="alert">
+    <div class="icon" aria-hidden="true">!</div>
+    <h1>登入失敗</h1>
+    <p>使用者名稱或密碼不正確，請返回登入頁後重新輸入。</p>
+    <a href="/login">返回登入頁</a>
+</main>
+</body>
+</html>

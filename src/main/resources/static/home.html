@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>首頁</title>
+    <!-- 此靜態頁由 PageController 的 GET /home 轉送顯示，並作為預設登入成功頁。 -->
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            display: grid;
+            place-items: center;
+            min-height: 100vh;
+            margin: 0;
+            padding: 24px;
+            color: #1f2937;
+            font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+            background: linear-gradient(135deg, #eff6ff, #f5f3ff);
+        }
+        .card {
+            width: min(100%, 560px);
+            padding: 40px;
+            border-radius: 18px;
+            background: #ffffff;
+            box-shadow: 0 20px 50px rgba(30, 64, 175, 0.13);
+            text-align: center;
+        }
+        h1 { margin: 0 0 12px; color: #1e3a8a; }
+        p { margin: 0 0 28px; color: #64748b; line-height: 1.7; }
+        .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; }
+        a, button {
+            display: inline-block;
+            padding: 11px 18px;
+            border: 0;
+            border-radius: 8px;
+            color: #ffffff;
+            font: inherit;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            background: #4f46e5;
+        }
+        button { background: #475569; }
+        form { margin: 0; }
+    </style>
+</head>
+<body>
+<!-- /home 允許匿名瀏覽；/resource 則用來示範登入保護。 -->
+<main class="card">
+    <h1>歡迎來到 CH15</h1>
+    <p>登入成功後預設會抵達此頁。您也可以進入受保護的資源頁，驗證存取控制是否正常。</p>
+    <div class="actions">
+        <a href="/resource">前往受保護資源</a>
+        <!-- CSRF 目前停用，因此可直接 POST；正式環境啟用 CSRF 後需附帶 Token。 -->
+        <form action="/logout" method="post">
+            <button type="submit">登出</button>
+        </form>
+    </div>
+</main>
+</body>
+</html>
