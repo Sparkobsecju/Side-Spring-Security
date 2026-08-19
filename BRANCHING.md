@@ -33,7 +33,7 @@
 
 1. 開始工作前同步基準分支：`git switch develop`、`git pull --ff-only`。
 2. 建立短期分支：`git switch -c feature/<簡短說明>`。
-3. 小步提交並維持清楚的 Commit 訊息。
+3. 小步提交並維持清楚的繁體中文 Commit 訊息。
 4. 推送分支：`git push -u origin feature/<簡短說明>`。
 5. 建立 Draft PR 至 `develop`，完成測試與自我 review 後再標記 Ready for review。
 6. 合併後刪除短期分支，並重新同步本機 `develop`。
@@ -42,6 +42,8 @@
 
 - 功能 PR 建議使用 Squash merge，讓 `develop` 歷史保持清楚。
 - PR 必須列出變更目的、影響範圍及驗證方式。
+- Commit 標題與說明使用繁體中文；除了列出修改內容，也要說明設計原因、安全取捨與對既有行為的影響。
+- PR 說明至少包含變更摘要、與先前版本的差異、設計原因、驗證結果，以及仍存在的風險或正式環境注意事項。
 - Java、Security、頁面路由或 Maven 相依變更必須通過 `mvn test`。
 - 禁止把密碼、Token、私鑰或正式環境機密提交至任何分支。
 - `hotfix/*` 合併至 `main` 後，必須再將相同修正合併或 cherry-pick 至 `develop`，避免下次發布遺失修正。
