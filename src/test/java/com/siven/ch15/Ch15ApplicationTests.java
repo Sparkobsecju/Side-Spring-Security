@@ -46,6 +46,14 @@ class Ch15ApplicationTests {
 			.andExpect(forwardedUrl("/login.html"));
 	}
 
+	/** 登入失敗頁允許匿名瀏覽，避免失敗 Handler 重新被導向登入頁。 */
+	@Test
+	void loginErrorPageIsPublic() throws Exception {
+		mockMvc.perform(get("/login-error"))
+			.andExpect(status().isOk())
+			.andExpect(forwardedUrl("/login-error.html"));
+	}
+
 	/** 未登入使用者存取受保護資源時會被導向自訂登入頁。 */
 	@Test
 	void protectedPageRedirectsToLogin() throws Exception {
@@ -62,7 +70,7 @@ class Ch15ApplicationTests {
 			.andExpect(forwardedUrl("/resource.html"));
 	}
 
-	/** 帳密正確且沒有先前保存的請求時，登入成功後預設前往首頁。 */
+	/** 帳密正確時，自訂成功 Handler 會將使用者導向首頁。 */
 	@Test
 	void validCredentialsRedirectToHome() throws Exception {
 		mockMvc.perform(formLogin()
@@ -72,7 +80,7 @@ class Ch15ApplicationTests {
 			.andExpect(redirectedUrl("/home"));
 	}
 
-	/** 帳密錯誤時依 failureUrl 導向獨立錯誤頁。 */
+	/** 帳密錯誤時，自訂失敗 Handler 會導向獨立錯誤頁。 */
 	@Test
 	void invalidCredentialsRedirectToLoginError() throws Exception {
 		mockMvc.perform(formLogin()
