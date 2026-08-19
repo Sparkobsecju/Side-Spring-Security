@@ -1,5 +1,7 @@
 package com.siven.ch15.config;
 
+import com.siven.ch15.config.handler.MyAuthenticationFailureHandler;
+import com.siven.ch15.config.handler.MyAuthenticationSuccessHandler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -17,15 +19,33 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableWebSecurity
 public class WebSecurityConfig {
 
+	private final MyAuthenticationSuccessHandler authenticationSuccessHandler;
+	private final MyAuthenticationFailureHandler authenticationFailureHandler;
+
 	/**
 	 * 不需要登入即可瀏覽的路徑。
 	 *
-	 * <p>{@code *.html} 是 MVC Controller 轉送至 static 目錄時使用的實體檔案路徑。</p>
+	 * <p>前三個路徑對應需求中的公開頁面；{@code /login-error} 是驗證失敗的目的地，
+	 * {@code *.html} 則是 {@link WebMvcConfig} 內部轉送時使用的靜態資源路徑。</p>
 	 */
 	private static final String[] PUBLIC_ENDPOINTS = {
 		"/", "/home", "/login", "/login-error",
 		"/home.html", "/login.html", "/login-error.html"
 	};
+
+	/**
+	 * 透過建構式注入登入成功與失敗策略，避免在 Security 設定中自行建立物件，
+	 * 並讓 Handler 可獨立測試或替換。
+	 *
+	 * @param authenticationSuccessHandler 登入成功後的處理策略
+	 * @param authenticationFailureHandler 登入失敗後的處理策略
+	 */
+	public WebSecurityConfig(
+		MyAuthenticationSuccessHandler authenticationSuccessHandler,
+		MyAuthenticationFailureHandler authenticationFailureHandler) {
+		this.authenticationSuccessHandler = authenticationSuccessHandler;
+		this.authenticationFailureHandler = authenticationFailureHandler;
+	}
 
 	/**
 	 * 建立整個應用程式共用的 Security Filter Chain。
@@ -43,12 +63,12 @@ public class WebSecurityConfig {
 				.requestMatchers(PUBLIC_ENDPOINTS).permitAll()
 				.anyRequest().authenticated()
 			)
-			// GET /login 由 PageController 顯示頁面；POST /login 由 Security Filter 處理。
+			// GET /login 由 WebMvcConfig 顯示頁面；POST /login 由 Security Filter 驗證。
 			.formLogin(form -> form
 				.loginPage("/login")
 				.loginProcessingUrl("/login")
-				.defaultSuccessUrl("/home")
-				.failureUrl("/login-error")
+				.successHandler(authenticationSuccessHandler)
+				.failureHandler(authenticationFailureHandler)
 				.permitAll()
 			)
 			// POST /logout 會清除驗證狀態，完成後回到登入頁並附帶 logout 參數。
